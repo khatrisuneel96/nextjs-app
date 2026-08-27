@@ -8,7 +8,11 @@ export async function getPosts() {
     cacheLife("days");
     cacheTag("posts");
 
-    const posts = await prisma.post.findMany();
+    const posts = await prisma.post.findMany({
+        orderBy: {
+            id: "asc",
+        },
+    });
     return posts;
 }
 
@@ -33,9 +37,21 @@ export async function createPost(formData: FormData) {
             title,
             content,
             published: true,
+            votes: 0,
             author: {
                 connect: { email: "alice@example.com" },
             },
+        },
+    });
+
+    updateTag("posts");
+}
+
+export async function upvotePost(id: number) {
+    await prisma.post.update({
+        where: { id },
+        data: {
+            votes: { increment: 1 },
         },
     });
 

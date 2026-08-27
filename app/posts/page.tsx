@@ -2,10 +2,12 @@ import Link from "next/link";
 import RecentlyViewPosts from "../../components/recently-view-posts";
 import { Suspense } from "react";
 import { createPost, getPosts } from "@/actions/actions";
+import UpvoteBtn from "@/components/upvote-btn";
 
 interface Post {
     id: number;
     title: string;
+    votes: number;
 }
 
 export default async function PostsPage() {
@@ -28,6 +30,7 @@ export default async function PostsPage() {
                                 >
                                     {post.title.charAt(0).toUpperCase() + post.title.slice(1)}
                                 </Link>
+                                <UpvoteBtn postId={post.id} initialVotes={post.votes} />
                             </div>
                         </li>
                     ))}
